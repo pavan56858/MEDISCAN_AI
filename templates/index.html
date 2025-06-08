@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Report Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Medical Report Analyzer</h1>
+            <p>Upload your medical report for instant analysis and recommendations</p>
+        </header>
+
+        <main>
+            <div class="upload-section">
+                <div class="upload-box" id="dropZone">
+                    <img src="{{ url_for('static', filename='upload-icon.svg') }}" alt="Upload" class="upload-icon">
+                    <h3>Drag & Drop your file here</h3>
+                    <p>or</p>
+                    <label for="fileInput" class="upload-button">Choose File</label>
+                    <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.txt" hidden>
+                    <p class="file-types">Supported formats: PDF, DOC, DOCX, TXT</p>
+                </div>
+            </div>
+
+            <div class="results-section" id="resultsSection" style="display: none;">
+                <div class="severity-indicator">
+                    <h3>Severity Level</h3>
+                    <div class="severity-badge" id="severityBadge"></div>
+                </div>
+
+                <div class="analysis-grid">
+                    <div class="analysis-card">
+                        <h3>Symptoms Detected</h3>
+                        <ul id="symptomsList"></ul>
+                    </div>
+
+                    <div class="analysis-card">
+                        <h3>Conditions Identified</h3>
+                        <ul id="conditionsList"></ul>
+                    </div>
+
+                    <div class="analysis-card">
+                        <h3>Recommended Medicines</h3>
+                        <ul id="medicinesList"></ul>
+                    </div>
+
+                    <div class="analysis-card">
+                        <h3>Diet Plan</h3>
+                        <ul id="dietList"></ul>
+                    </div>
+                </div>
+
+                <div class="doctor-consultation" id="doctorConsultation" style="display: none;">
+                    <div class="warning-banner">
+                        <h3>⚠️ Doctor Consultation Recommended</h3>
+                        <p>Based on the analysis, we recommend consulting a healthcare professional.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="loading" id="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>Analyzing your report...</p>
+            </div>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html> 
