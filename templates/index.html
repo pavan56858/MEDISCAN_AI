@@ -6,6 +6,7 @@
     <title>Medical Report Analyzer</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <meta name="description" content="Analyze your medical reports and get instant insights about your health condition">
 </head>
 <body>
     <div class="container">
@@ -16,13 +17,13 @@
         </header>
 
         <main>
-            <div class="input-toggle">
-                <button class="toggle-btn active" data-mode="file">File Upload</button>
-                <button class="toggle-btn" data-mode="text">Text Input</button>
+            <div class="input-toggle" role="tablist" aria-label="Input method selection">
+                <button class="toggle-btn active" data-mode="file" role="tab" aria-selected="true" aria-controls="fileUploadSection">File Upload</button>
+                <button class="toggle-btn" data-mode="text" role="tab" aria-selected="false" aria-controls="textInputSection">Text Input</button>
             </div>
 
-            <div class="upload-section" id="fileUploadSection">
-                <div class="upload-box" id="dropZone">
+            <div class="upload-section" id="fileUploadSection" role="tabpanel">
+                <div class="upload-box" id="dropZone" role="button" tabindex="0" aria-label="File upload area">
                     <div class="upload-icon-container">
                         <img src="{{ url_for('static', filename='upload-icon.svg') }}" alt="Upload" class="upload-icon">
                     </div>
@@ -31,50 +32,70 @@
                     <label for="fileInput" class="upload-button">
                         <span class="button-text">Choose File</span>
                     </label>
-                    <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.txt" hidden>
+                    <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.txt" hidden aria-label="File input">
                     <p class="file-types">Supported formats: PDF, DOC, DOCX, TXT</p>
+                    <p class="file-size-limit">Maximum file size: 16MB</p>
+                </div>
+                <div class="file-preview" id="filePreview" style="display: none;">
+                    <div class="selected-file">
+                        <span id="selectedFileName"></span>
+                        <button id="removeFile" class="remove-button" aria-label="Remove selected file">×</button>
+                    </div>
+                    <button id="analyzeFile" class="analyze-button" aria-label="Analyze selected file">
+                        <span class="button-text">Analyze File</span>
+                    </button>
                 </div>
             </div>
 
-            <div class="text-input-section" id="textInputSection" style="display: none;">
+            <div class="text-input-section" id="textInputSection" role="tabpanel" style="display: none;">
                 <div class="text-input-box">
                     <h3>Describe your condition or paste your medical report</h3>
-                    <textarea id="medicalText" placeholder="Enter your medical report or describe your symptoms and conditions here..." rows="8"></textarea>
-                    <button id="analyzeText" class="analyze-button">
+                    <textarea 
+                        id="medicalText" 
+                        placeholder="Enter your medical report or describe your symptoms and conditions here..." 
+                        rows="8"
+                        aria-label="Medical report text input"
+                    ></textarea>
+                    <button id="analyzeText" class="analyze-button" aria-label="Analyze text input">
                         <span class="button-text">Analyze Text</span>
                     </button>
                 </div>
             </div>
 
-            <div class="results-section" id="resultsSection" style="display: none;">
+            <div class="loading" id="loading" style="display: none;" role="status" aria-live="polite">
+                <div class="spinner" aria-hidden="true"></div>
+                <p>Analyzing your report...</p>
+            </div>
+
+            <div class="results-section" id="resultsSection" style="display: none;" role="region" aria-label="Analysis results">
                 <div class="severity-indicator">
                     <h3>Severity Level</h3>
-                    <div class="severity-badge" id="severityBadge"></div>
+                    <div class="severity-badge" id="severityBadge" role="status" aria-label="Severity level"></div>
                 </div>
 
                 <div class="analysis-grid">
                     <div class="analysis-card">
                         <h3>Symptoms Detected</h3>
-                        <ul id="symptomsList"></ul>
+                        <ul id="symptomsList" role="list" aria-label="Detected symptoms"></ul>
                     </div>
 
                     <div class="analysis-card">
                         <h3>Conditions Identified</h3>
-                        <ul id="conditionsList"></ul>
+                        <ul id="conditionsList" role="list" aria-label="Identified conditions"></ul>
                     </div>
 
                     <div class="analysis-card">
                         <h3>Recommended Medicines</h3>
-                        <ul id="medicinesList"></ul>
+                        <ul id="medicinesList" role="list" aria-label="Recommended medicines"></ul>
                     </div>
 
                     <div class="analysis-card">
                         <h3>Diet Plan</h3>
-                        <ul id="dietList"></ul>
+                        <ul id="dietList" role="list" aria-label="Recommended diet plan"></ul>
                     </div>
                 </div>
 
-                <div class="doctor-consultation" id="doctorConsultation" style="display: none;">
+                <div class="doctor-consultation" id="doctorConsultation" style="display: none;" role="alert">
                     <div class="warning-banner">
                         <h3>⚠️ Doctor Consultation Recommended</h3>
                         <p>Based on the analysis, we recommend consulting a healthcare professional.</p>
@@ -82,10 +103,7 @@
                 </div>
             </div>
 
-            <div class="loading" id="loading" style="display: none;">
-                <div class="spinner"></div>
-                <p>Analyzing your report...</p>
-            </div>
+            <div id="errorContainer" role="alert" aria-live="assertive"></div>
         </main>
     </div>
 
